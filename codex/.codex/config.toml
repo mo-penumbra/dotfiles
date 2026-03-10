@@ -1,8 +1,11 @@
-model = "gpt-5.3-codex"
+model = "gpt-5.4"
 model_reasoning_effort = "xhigh"
 personality = "pragmatic"
 
-[projects."/home/<YOUR_USERNAME>"]
+[projects."/home/mo"]
+trust_level = "trusted"
+
+[projects."/Users/mo/penumbra"]
 trust_level = "trusted"
 
 [mcp_servers.linear]

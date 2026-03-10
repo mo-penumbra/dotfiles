@@ -27,7 +27,6 @@ These `.template` files have placeholder API keys. Copy and fill in on each mach
 
 ```bash
 cp claude/.claude/claude_desktop_config.json.template ~/.claude/claude_desktop_config.json
-cp claude/.codex/config.toml.template ~/.codex/config.toml
 # Then edit each file to add your actual API keys
 ```
 
@@ -40,6 +39,7 @@ cp claude/.codex/config.toml.template ~/.codex/config.toml
 | `tmux` | `.tmux.conf` | Terminal multiplexer settings |
 | `ssh` | `.ssh/config` | SSH host configuration (no keys) |
 | `claude` | `.claude/CLAUDE.md`, `.claude/settings.json` | Claude Code global preferences |
+| `codex` | `.codex/config.toml` | OpenAI Codex CLI config |
 | `jupyter` | `.jupyter/jupyter_server_config.py` | Jupyter default kernel |
 | `tools` | `.config/htop/htoprc` | htop display settings |
 
