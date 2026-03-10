@@ -1,33 +1,6 @@
-[credential "https://github.com"]
-	helper =
-	helper = !/usr/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper =
-	helper = !/usr/bin/gh auth git-credential
-[alias]
-  alias = !echo 'git config --get-regexp ^alias\\.' && git config --get-regexp ^alias\\.
-  ac = !echo 'git add -A , git commit -m' && git add -A && git commit -m
-  b = !echo 'git branch' && git branch
-  browse = !echo 'start `git config get remote.origin.url`' && start `git config get remote.origin.url`
-  cm = !echo 'git commit -m' && git commit -m
-  co = !echo 'git checkout' && git checkout
-  delete-local-branches-already-merged-in-remote = !echo 'git branch --merged | egrep -i -v(main|master|develop|dev|staging|release)| xargs -r git branch -d' && git branch --merged | egrep -i -v '(main|master|develop|dev|staging|release)' | xargs -r git branch -d
-  delete-local-branches-already-merged-in-remote-what-if = !echo 'git branch --merged | egrep -i -v(main|master|develop|dev|staging|release)//| xargs -r git branch -d' && git branch --merged | egrep -i -v '(main|master|develop|dev|staging|release)'
-  delete-local-tags = !echo 'git tag -l | xargs git tag -d && git fetch --tags' && git tag -l | xargs git tag -d && git fetch --tags
-  delete-stale-remote-tracking-branches-from-local = !echo 'git remote prune origin' && git remote prune origin
-  hist = !echo 'git log --oneline --graph --decorate --all' && git log --oneline --graph --decorate --all
-  st = !echo 'git status' && git status
-  ss = !echo 'git status -s' && git status -s
-  pushnew = !echo 'git push --set-upstream origin branch_name' && git push --set-upstream origin `git symbolic-ref --short HEAD`
-  stashall = !echo 'git stash push --include-untracked' && git stash push --include-untracked
-	cleanup = !git fetch -p && git for-each-ref --format \"%(refname:short) %(upstream:track)\" refs/heads | awk '$2 == \"[gone]\" {print $1}' | xargs -r -p -n1 git branch -D
+# This is Git's per-user configuration file.
 [user]
-	name = <YOUR_NAME>
-	email = <YOUR_EMAIL>
-	signingkey = ~/.ssh/id_ed25519.pub
-[pull]
-	rebase = false
-[gpg]
-	format = ssh
-[commit]
-	gpgsign = true
+	name = Mo
+	email = mo@penumbra-ig.com
+[alias]
+	cleanup = "!git fetch -p && for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -d \"$branch\"; done"
