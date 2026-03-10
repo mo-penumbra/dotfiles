@@ -1,0 +1,6 @@
+# SSH keys and known hosts
+ssh/.ssh/id_*
+ssh/.ssh/known_hosts
+
+# Secrets (real versions live on each machine, not in repo)
+*.secret

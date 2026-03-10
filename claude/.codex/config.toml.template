@@ -1,0 +1,12 @@
+model = "gpt-5.3-codex"
+model_reasoning_effort = "xhigh"
+personality = "pragmatic"
+
+[projects."/home/<YOUR_USERNAME>"]
+trust_level = "trusted"
+
+[mcp_servers.linear]
+url = "https://mcp.linear.app/mcp"
+
+[mcp_servers.notion]
+url = "https://mcp.notion.com/mcp"
