@@ -1,17 +1,71 @@
 {
-  "env": {
-    "DISABLE_AUTOUPDATER": "1",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-  },
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
-      "Read",
-      "Grep",
-      "Glob"
+      "Bash(npm run typecheck:*)",
+      "Read(//Users/mo/penumbra-ms-state-refactor/**)",
+      "Read(//tmp/**)",
+      "Bash(git -C /Users/mo/penumbra-fix-vendor-arcana-sdk log --oneline origin/fix/vendor-arcana-sdk -5)"
     ]
   },
-  "model": "opus",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"Environment: $(hostname) | OS: $(uname) | User: $(whoami)\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.command' >> ~/cmds.txt"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '\"edit \" + .tool_input.file_path' >> ~/edits.txt"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '\"write \" + .tool_input.file_path' >> ~/edits.txt"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/rust-simplify-nudge.sh"
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {
-    "linear@claude-plugins-official": true
+    "rust-analyzer-lsp@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "fastMode": true,
+  "feedbackSurveyState": {
+    "lastShownTime": 1754081479522
   }
 }
