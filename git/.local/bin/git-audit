@@ -8,22 +8,19 @@ header() { printf '\n\033[1;36m── %s ──\033[0m\n' "$1"; }
 
 git rev-parse --git-dir >/dev/null 2>&1 || { echo "Not a git repo"; exit 1; }
 
-header "Most-changed files (since $SINCE)"
+header "File churn (since $SINCE)"
 git log --format=format: --name-only --since="$SINCE" \
   | sort | uniq -c | sort -nr | head -20
 
-header "Top contributors (all time)"
+header "Commits by author (all time)"
 git shortlog -sn --no-merges
 
-header "Active contributors (since $SINCE)"
+header "Commits by author (since $SINCE)"
 git shortlog -sn --no-merges --since="$SINCE"
 
-header "Bug hotspots (since $SINCE)"
-git log -i -E --grep="fix|bug|broken" --name-only --format='' --since="$SINCE" \
+header "Files in fix/bug commits (since $SINCE)"
+git log -i -E --grep="\b(fix|fixed|fixes|bug|broken)\b" --name-only --format='' --since="$SINCE" \
   | sort | uniq -c | sort -nr | head -20
 
-header "Commit velocity (by month)"
-git log --format='%ad' --date=format:'%Y-%m' | sort | uniq -c
-
-header "Firefighting (since $SINCE)"
-git log --oneline --since="$SINCE" | grep -iE 'revert|hotfix|emergency|rollback' || echo "  None found"
+header "Reverts and hotfixes (since $SINCE)"
+git log --oneline --since="$SINCE" | grep -iEw 'revert|hotfix|emergency|rollback' || echo "  None found"
