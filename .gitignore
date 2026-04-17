@@ -2,5 +2,9 @@
 ssh/.ssh/id_*
 ssh/.ssh/known_hosts
 
+# SSH control sockets (dir is stowed, contents are runtime state)
+ssh/.ssh/sockets/*
+!ssh/.ssh/sockets/.gitkeep
+
 # Secrets (real versions live on each machine, not in repo)
 *.secret

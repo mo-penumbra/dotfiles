@@ -1,0 +1,53 @@
+# Mac-only config (laptop).
+
+# PATH
+export PATH="/Users/mo/.antigravity/antigravity/bin:$PATH"
+
+# Penumbra
+alias etl="uv run --project ~/penumbra etl"
+alias pig="uv run --project ~/penumbra pig"
+alias cronctl="uv run --project ~/penumbra cronctl"
+alias test_ms="cd ~/penumbra && uv run python -m pytest packages/ms_python/tests/"
+
+# zoxide: `z <partial>` to jump by frecency
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
+# tmux helpers (local laptop tmux — remote tmux is handled by `pig ssh`)
+if command -v tmux >/dev/null 2>&1; then
+  # Attach to (or create) the long-lived "main" session.
+  tm() {
+    tmux attach -t main 2>/dev/null || tmux new-session -s main
+  }
+
+  # Open/jump to a VM window in "main" running `pig ssh dev-<name>-host`.
+  # Usage: vm engineering
+  vm() {
+    local short="${1:?usage: vm <short-name>  (e.g. engineering, macro, sandbox)}"
+    local host="dev-${short}-host"
+    local cmd="uv run --project ~/penumbra pig ssh ${host}"
+
+    tmux has-session -t main 2>/dev/null || tmux new-session -d -s main
+
+    if ! tmux list-windows -t main -F '#W' | grep -qx "$short"; then
+      tmux new-window -t main -n "$short" "$cmd"
+    fi
+
+    if [ -n "$TMUX" ]; then
+      tmux select-window -t "main:$short"
+    else
+      tmux attach -t "main:$short"
+    fi
+  }
+
+  _vm_complete() {
+    local -a vms
+    vms=(${(f)"$(pig list vms 2>/dev/null | awk '/^  dev-.*-host:/{gsub(/^  dev-|-host:.*/,"",$1); print $1}')"})
+    compadd -- $vms
+  }
+  compdef _vm_complete vm
+fi
+
+# iTerm2 shell integration
+[ -f "$HOME/.iterm2_shell_integration.zsh" ] && source "$HOME/.iterm2_shell_integration.zsh"
