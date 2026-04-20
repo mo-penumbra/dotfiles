@@ -22,6 +22,9 @@ Work flows through these skills in order. Suggest the next step when one complet
 
 ## Environment Detection
 
-Detect where I'm working by checking the hostname:
-- **Local (macOS)**: my dev laptop
-- **Azure VMs**: hostname matches `dev-<role>-host` — roles include engineering, macro, resourceintensive, sandbox, cache
+Detect where I'm working by reading `/etc/penumbra/host-role`:
+- **File missing** → local macOS laptop
+- **`service`** → Azure service VM (provisioned by ansible `service_host` role)
+- **`team`** → Azure team/dev VM (provisioned by ansible `team_host` role)
+
+The role is set at provisioning time from the Azure VM tag `host_type`; inventory logic lives in `~/penumbra/infra/ansible/inventory.py`. Prefer this file over hostname sniffing.
